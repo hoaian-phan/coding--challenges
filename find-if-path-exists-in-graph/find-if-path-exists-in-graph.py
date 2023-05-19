@@ -1,22 +1,24 @@
+from collections import deque
+
 class Solution:
     def validPath(self, n: int, edges: List[List[int]], source: int, destination: int) -> bool:
-        myStack = [source]
-        seen = set()
-        
         adjacent_list = [[] for _ in range(n)]
-        for a, b in edges:
+        for a,b in edges:
             adjacent_list[a].append(b)
             adjacent_list[b].append(a)
-            
-        while myStack:
-            current = myStack.pop()
-            if current == destination:
+        
+        queue = deque([source])
+        seen = set([source])
+        
+        while queue:
+            node = queue.popleft()
+            if node == destination:
                 return True
-            if current not in seen:
-                myStack.extend(adjacent_list[current])
-                seen.add(current)
-                
+            for neighbor in adjacent_list[node]:
+                if neighbor not in seen:
+                    queue.append(neighbor)
+                    seen.add(neighbor)
+                    
         return False
-            
-        
-        
+                    
+                    
